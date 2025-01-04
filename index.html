@@ -2,212 +2,143 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XNKEVIN.CROXY</title>
+    <title>Hand Controlled Game</title>
     <style>
-        * {
+        body {
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            overflow: hidden;
+            background-color: #f0f0f0;
         }
-
-        /* Menata navbar */
-        nav {
-            width: 100%;
-            background-color: #0510a8;
-            font-family: Arial, sans-serif;
-            padding: 0; /* Menghapus padding untuk mepet dengan bagian atas */
-        }
-
-        /* Mengatur menu dengan Flexbox */
-        nav ul {
-            display: flex; /* Menggunakan flexbox */
-            justify-content: center; /* Menyusun menu secara horizontal dan terpusat */
-            list-style: none;
-        }
-
-        /* Menata tiap list item */
-        nav ul li {
-            margin: 0; /* Menghapus margin antara item menu */
-        }
-
-        /* Menata link */
-        nav ul li a {
+        canvas {
             display: block;
-            padding: 20px 25px;
-            color: rgb(255, 255, 255);
-            margin-top: 0px;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        /* Efek hover pada menu */
-        nav ul li:hover {
-            background-color: #db1da2;
-            border-radius: 10px; /* Sudut gambar yang tumpul */
-        }
-
-        nav ul li:hover a {
-            color: #000;
-        }
-
-        /* Menata tulisan h2 */
-        h2 {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            background-color: #000a97;
-            color: #ffee00; /* Warna teks */
-            margin-top: 0px; /* Menghilangkan jarak atas */
-            margin-bottom: 0px; /* Jarak bawah */
-            letter-spacing: 2px; /* Jarak antar huruf */
-            padding: 5px 0; /* Padding atas dan bawah untuk memberi ruang di sekitar teks */
-            
-            /* Menambahkan animasi berkedip */
-            animation: blink 2s infinite; /* Animasi blink dengan durasi 1 detik */
-            background-color: #280e9e;
-        }
-
-        /* Animasi berkedip */
-        @keyframes blink {
-            0% {
-                opacity: 2; /* Teks terlihat */
-            }
-            50% {
-                opacity: 0; /* Teks menghilang */
-            }
-            100% {
-                opacity: 1; /* Teks terlihat lagi */
-            }
-        }
-
-        /* Menata gambar di bawah navbar */
-        .image-section {
-            background-color: #071085; /* Latar belakang biru */
-            text-align: center; /* Agar gambar berada di tengah */
-            padding: 10px 0; /* Memberi ruang atas dan bawah */
-        }
-
-        .image-section img {
-            width: 200%; /* Ukuran gambar */
-            max-width: 275px; /* Ukuran maksimal gambar */
-            height: auto; /* Agar gambar tetap proporsional */
-            margin-top: 10px;
-            border-radius: 10px; /* Sudut gambar yang tumpul */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Efek bayangan di sekitar gambar */
-        }
-
-        /* Menata footer */
-        footer {
-            background-color: #000549;
-            color: white;
-            margin-top: 0px;
-            text-align: center;
-            padding: 10px 0;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-
-        /* Popup style */
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #ffffff;
-            padding: 20px;
-            border: 2px solid #0510a8;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-            z-index: 1000; /* Pastikan popup berada di atas konten lainnya */
-            display: none; /* Default hidden */
-        }
-
-        /* Tombol close (silang) */
-        .close-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #0510a8;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
         }
-
-        /* Background hitam transparan di luar popup */
-        .popup-overlay {
-            position: fixed;
+        #webcam {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999; /* Pastikan overlay berada di bawah popup */
-            display: none; /* Default hidden */
+            opacity: 0.5;
         }
-
-        /* Menata teks "XNKEVIN.CROXY.COM" dalam popup menjadi warna emas */
-        .popup h3 {
-            color: #ffee00; /* Warna emas */
-            font-size: 20px; /* Ukuran teks */
-            font-weight: bold;
-            position: center;
-        }
-
     </style>
 </head>
 <body>
-    <!-- Teks Heading 2 -->
-    <h2>XNKEVIN.COM</h2>
-    
-    <!-- Navbar -->
-    <nav>
-        <ul>
-            <li><a href="menu.html">Home</a></li>
-            <li><a href="#">Gallery</a></li>
-            <li><a href="#">Profile</a></li>
-        </ul>
-    </nav>
 
-    <!-- Gambar di bawah navbar -->
-    <div class="image-section">
-        <img src="IMG-20250104-WA0005.jpg" alt="Your Image">
-        <img src="IMG-20250104-WA0008.jpg" alt="Your Image">
-        <img src="IMG-20250104-WA0007.jpg" alt="Your Image">
-    </div>
+<video id="webcam" autoplay></video>
+<canvas id="gameCanvas"></canvas>
 
-    <!-- Overlay dan Popup -->
-    <div class="popup-overlay"></div>
-    <div class="popup">
-        <button class="close-btn" onclick="closePopup()">×</button>
-        <h3>Selamat Datang Di XNKEVIN.CROXY!</h3>
-        <p>Web Ini Di Buat Untuk Melihat Profil Pribadi Kevin</p>
-    </div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/handpose"></script>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 XNKEVIN.CROXY.COM. All Rights Reserved.</p>
-    </footer>
+<script>
+    let video;
+    let model;
+    let canvas, ctx;
+    let gameObject;
 
-    <script>
-        // Fungsi untuk menampilkan popup dan overlay
-        window.onload = function() {
-            document.querySelector('.popup').style.display = 'block';
-            document.querySelector('.popup-overlay').style.display = 'block';
+    // Setup Webcam and canvas
+    async function setupWebcam() {
+        video = document.getElementById('webcam');
+        canvas = document.getElementById('gameCanvas');
+        ctx = canvas.getContext('2d');
+        
+        // Get webcam stream
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: true
+        });
+        video.srcObject = stream;
+        
+        // Set canvas size to match video
+        video.onloadedmetadata = () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+        };
+    }
+
+    // Load HandPose model from TensorFlow
+    async function loadHandPoseModel() {
+        model = await handpose.load();
+        console.log("HandPose model loaded.");
+        detectHands();
+    }
+
+    // Detect hands and get hand landmarks
+    async function detectHands() {
+        const predictions = await model.estimateHands(video);
+
+        if (predictions.length > 0) {
+            const hand = predictions[0];
+            const landmarks = hand.landmarks;
+
+            // Get the wrist position (index 0) to control the game object
+            const wrist = landmarks[0];
+            controlGameObject(wrist);
+            
+            // Draw the hand on the canvas
+            drawHand(landmarks);
         }
 
-        // Fungsi untuk menutup popup dan overlay
-        function closePopup() {
-            document.querySelector('.popup').style.display = 'none';
-            document.querySelector('.popup-overlay').style.display = 'none';
-        }
-    </script>
+        requestAnimationFrame(detectHands);
+    }
+
+    // Control the game object based on hand position (wrist)
+    function controlGameObject(wrist) {
+        if (!gameObject) return;
+
+        // Get wrist coordinates
+        const [x, y] = wrist;
+
+        // Normalize wrist position (for the game object control)
+        gameObject.x = x;
+        gameObject.y = y;
+    }
+
+    // Draw hand landmarks on canvas
+    function drawHand(landmarks) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw each landmark
+        landmarks.forEach(([x, y]) => {
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+        });
+    }
+
+    // Game setup
+    function setupGame() {
+        gameObject = { x: canvas.width / 2, y: canvas.height / 2, size: 50 };
+
+        // Start the game loop
+        gameLoop();
+    }
+
+    // Game Loop
+    function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw game object
+        ctx.beginPath();
+        ctx.arc(gameObject.x, gameObject.y, gameObject.size, 0, 2 * Math.PI);
+        ctx.fillStyle = "green";
+        ctx.fill();
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Initialize everything
+    async function init() {
+        await setupWebcam();
+        await loadHandPoseModel();
+        setupGame();
+    }
+
+    init();
+</script>
+
 </body>
 </html>
