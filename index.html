@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVIN.COM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Menata navbar */
+        nav {
+            width: 100%;
+            background-color: #0510a8;
+            font-family: Arial, sans-serif;
+            padding: 0;
+        }
+
+        /* Mengatur menu dengan Flexbox */
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        /* Menata tiap list item */
+        nav ul li {
+            margin: 0;
+        }
+
+        /* Menata link */
+        nav ul li a {
+            display: block;
+            padding: 20px 25px;
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            text-align: center;
+        }
+
+        /* Efek hover pada menu */
+        nav ul li:hover {
+            background-color: #db1da2;
+            border-radius: 10px;
+        }
+
+        nav ul li:hover a {
+            color: #000;
+        }
+
+        /* Menata tulisan h2 */
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #000a97;
+            color: #ffee00;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            letter-spacing: 2px;
+            padding: 5px 0;
+            animation: blink 2s infinite;
+            background-color: #b90b94;
+        }
+
+        /* Animasi berkedip */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Mengatur Video Section agar mengisi layar penuh */
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-y: scroll; /* Memungkinkan scroll antar video */
+            scroll-snap-type: y mandatory; /* Menjamin scroll satu video per scroll */
+        }
+
+        .video-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            scroll-snap-align: start; /* Menyelaraskan video ke atas saat scroll */
+            background-color: #000; /* Latar belakang hitam */
+        }
+
+        .video-section video {
+            width: 100vw; /* Video memenuhi lebar layar */
+            height: 100vh; /* Video memenuhi tinggi layar */
+            object-fit: cover; /* Agar video tetap proporsional dan memenuhi layar */
+        }
+
+        /* Menata footer */
+        footer {
+            background-color: #00158f;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        /* Popup style */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        /* Tombol close (silang) */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #020301;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Background hitam transparan di luar popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .popup h3 {
+            color: #000000;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Teks Heading 2 -->
+    <h2>KEVIN.COM</h2>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Saran Video</a></li>
+            <li><a href="PREMIUM.html">PREMIUM</a></li>
+            <li><a href="#">Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Video Section Container -->
+    <div class="video-container">
+        <!-- Video pertama -->
+        <div class="video-section">
+            <video class="video-player" controls>
+                <source src="TikTok - Make Your Day.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Video kedua -->
+        <div class="video-section">
+            <video class="video-player" controls>
+                <source src="TikTok - Make Your Day_2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Video ketiga -->
+        <div class="video-section">
+            <video class="video-player" controls>
+                <source src="TikTok - Make Your Day_3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- Video keempat -->
+        <div class="video-section">
+            <video class="video-player" controls>
+                <source src="TikTok - Make Your Day_4.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <!-- Overlay dan Popup -->
+    <div class="popup-overlay"></div>
+    <div class="popup">
+        <button class="close-btn" onclick="closePopup()">×</button>
+        <h3>Selamat Datang Di corp.com</h3>
+        <p>Situs Ini di buat oleh YT:MR.CICADA Dan hanya untuk Edukasi 18+</p>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 CICADA.CORXY</p>
+    </footer>
+
+    <script>
+        // Ambil semua elemen video
+        const videos = document.querySelectorAll('.video-player');
+
+        // Buat observer untuk mendeteksi video yang terlihat di layar
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    // Jika video terlihat, mulai memainkan
+                    video.play();
+                } else {
+                    // Jika video tidak terlihat, hentikan
+                    video.pause();
+                    video.currentTime = 0; // Reset video ke awal
+                }
+            });
+        }, { threshold: 0.5 }); // threshold 0.5 berarti video harus setidaknya 50% terlihat di layar
+
+        // Mulai observer untuk setiap video
+        videos.forEach(video => {
+            observer.observe(video);
+        });
+
+        // Fungsi untuk menampilkan popup dan overlay
+        window.onload = function() {
+            document.querySelector('.popup').style.display = 'block';
+            document.querySelector('.popup-overlay').style.display = 'block';
+        }
+
+        // Fungsi untuk menutup popup dan overlay
+        function closePopup() {
+            document.querySelector('.popup').style.display = 'none';
+            document.querySelector('.popup-overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

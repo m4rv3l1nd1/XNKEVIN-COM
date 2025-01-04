@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PREMIUM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            background-color: #f4f4f4;
+        }
+
+        /* Video container yang mengandung semua video */
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            pointer-events: none; /* Menonaktifkan interaksi dengan video sebelum login */
+            filter: blur(10px); /* Blur background */
+            transition: filter 0.3s ease-in-out; /* Transisi halus untuk blur */
+        }
+
+        .video-section {
+            text-align: center;
+            display: block;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            scroll-snap-align: start;
+        }
+
+        .video-section h2 {
+            color: white;
+            background-color: blue;
+            font-size: 30px;
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            padding: 10px;
+            top: 20px;
+            left: 0;
+            z-index: 10;
+            font-weight: bold;
+            color: yellow;
+        }
+
+        .video-section video {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            transition: opacity 0.3s ease-out; /* Menambahkan transisi halus pada opacity */
+        }
+
+        /* Form login yang mengambang di atas konten */
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10; /* pastikan z-index tidak menutup popup */
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Popup styling */
+        .popup {
+            position: fixed;
+            top: 48%;
+            left: 48%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 100; /* pastikan popup berada di atas form login */
+            display: none;
+        }
+
+        .popup h3 {
+            color: #000000;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .popup p {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .popup .countdown {
+            font-size: 18px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Formulir Masuk -->
+    <div class="login-container" id="login-form">
+        <h2>Masuk untuk melihat konten</h2>
+        <input type="text" id="username" placeholder="Nama Pengguna" required>
+        <input type="password" id="password" placeholder="Kata Sandi" required>
+        <button onclick="validateLogin()">Masuk</button>
+        <p class="error-message" id="error-message">Nama pengguna atau kata sandi salah.</p>
+    </div>
+
+    <!-- Bagian Video -->
+    <div class="video-container" id="video-container">
+        <div class="video-section">
+            <video class="video-item" id="video1" controls>
+                <source src="TikTok - Make Your Day.mp4" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+        <div class="video-section">
+            <video class="video-item" id="video2" controls>
+                <source src="TikTok - Make Your Day_2.mp4" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+        <div class="video-section">
+            <video class="video-item" id="video3" controls>
+                <source src="TikTok - Make Your Day_3.mp4" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+    </div>
+
+    <!-- Popup untuk memberitahu kesalahan login -->
+    <div class="popup" id="popup">
+        <h3>Kesalahan Masuk!</h3>
+        <p>Anda telah mencoba 5 kali masuk dengan kata sandi yang salah. Harap tunggu selama <span id="countdown-timer" class="countdown">15</span> detik atau hubungi nomor berikut untuk berlangganan konten Premium:</p>
+        <p><strong>09238459589053</strong></p>
+    </div>
+
+    <script>
+        // Data nama pengguna dan kata sandi yang valid
+        const validUsers = [
+            { username: "1", password: "1" },
+            { username: "user1", password: "mypassword" },
+            { username: "user2", password: "securepassword" }
+        ];
+
+        // Variabel untuk membatasi jumlah percakapan masuk
+        let attemptCount = 0;
+        let lockoutTime = 0;
+        let countdownInterval;
+
+        // Fungsi untuk validasi masuk
+        function validateLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Cek jika terdapat percakapan waktu penutupan akun
+            if (lockoutTime > 0) {
+                return;  // Tidak lakukan login jika dalam masa lockout
+            }
+
+            const user = validUsers.find(user => user.username === username && user.password === password);
+
+            if (user) {
+                // Menghilangkan form login dan menampilkan video
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('video-container').style.display = 'block';
+                document.getElementById('error-message').style.display = 'none';
+                clearInterval(countdownInterval);
+                document.getElementById('popup').style.display = 'none';
+
+                // Menghapus blur dan mengaktifkan interaksi dengan video
+                document.getElementById('video-container').style.filter = 'none';
+                document.getElementById('video-container').style.pointerEvents = 'auto';
+
+                // Memulai video pertama setelah login
+                const firstVideo = document.getElementById('video1');
+                firstVideo.play(); // Play video pertama
+            } else {
+                attemptCount++;
+                document.getElementById('error-message').style.display = 'block';
+
+                if (attemptCount >= 5) {
+                    lockoutTime = 15;
+                    attemptCount = 0;
+                    document.getElementById('error-message').style.display = 'none';
+                    startCountdown();
+                    showPopup();
+                }
+            }
+        }
+
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';  // Menampilkan popup
+        }
+
+        function startCountdown() {
+            const countdownElem = document.getElementById('countdown-timer');
+            let countdownTime = lockoutTime;
+
+            countdownInterval = setInterval(function () {
+                countdownElem.textContent = countdownTime;
+                countdownTime--;
+                if (countdownTime < 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('popup').style.display = 'none';  // Sembunyikan popup setelah hitungan selesai
+                    document.getElementById('login-form').style.display = 'block';  // Tampilkan kembali form login
+                    lockoutTime = 0;
+                    document.getElementById('error-message').style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        // Mengamati video agar autoplay dan berhenti jika video lain yang diputar
+        const videos = document.querySelectorAll('.video-item');
+        let currentVideo = null;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+
+                if (entry.isIntersecting) {
+                    video.play(); // Play video saat masuk viewport
+                    if (currentVideo && currentVideo !== video) {
+                        currentVideo.pause(); // Pause video lain jika ada
+                    }
+                    currentVideo = video;
+                } else {
+                    video.pause(); // Pause video saat keluar dari viewport
+                }
+            });
+        }, {
+            threshold: 0.5 // Video harus lebih dari 50% terlihat untuk memulai autoplay
+        });
+
+        // Observer semua video
+        videos.forEach(video => {
+            observer.observe(video);
+        });
+
+    </script>
+</body>
+</html>
