@@ -3,86 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deteksi Wajah dan Perkiraan Usia</title>
+  <title>Pingpong dengan Tracking Tangan</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
     }
-    #canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    video {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    .info {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      color: white;
-      font-size: 20px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 5px;
-      border-radius: 5px;
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background-color: #222;
     }
   </style>
 </head>
 <body>
-  <h1>Deteksi Wajah dan Perkiraan Usia</h1>
-  <video id="videoInput" width="640" height="480" autoplay muted></video>
-  <canvas id="canvas"></canvas>
-  <div class="info" id="ageInfo">Usia: -</div>
 
-  <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api"></script>
-  <script>
-    const video = document.getElementById('videoInput');
-    const canvas = document.getElementById('canvas');
-    const ageInfo = document.getElementById('ageInfo');
+<canvas id="pingpongGame" width="800" height="600"></canvas>
 
-    async function setup() {
-      // Muat model face-api.js
-      await faceapi.nets.ssdMobilenetv1.loadFromUri('/models');
-      await faceapi.nets.ageGenderNet.loadFromUri('/models');
-      await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-      await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+<!-- Memuat MediaPipe untuk pelacakan tangan -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 
-      // Akses kamera
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true
-      });
-      video.srcObject = stream;
+<script>
+  const canvas = document.getElementById("pingpongGame");
+  const ctx = canvas.getContext("2d");
 
-      video.onplay = () => {
-        // Gambar setiap frame
-        setInterval(async () => {
-          const detections = await faceapi.detectAllFaces(video)
-            .withFaceLandmarks()
-            .withAgeAndGender();
+  const paddleWidth = 10, paddleHeight = 100;
+  const ballRadius = 10;
+  const speed = 6;
 
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          const displaySize = { width: video.videoWidth, height: video.videoHeight };
-          faceapi.matchDimensions(canvas, displaySize);
+  let ballX = canvas.width / 2, ballY = canvas.height / 2;
+  let ballSpeedX = speed, ballSpeedY = speed;
+  let leftPaddleY = (canvas.height - paddleHeight) / 2;
+  let rightPaddleY = (canvas.height - paddleHeight) / 2;
 
-          const resizedDetections = faceapi.resizeResults(detections, displaySize);
-          canvas?.clear();
-          faceapi.draw.drawDetections(canvas, resizedDetections);
-          faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-          faceapi.draw.drawAgeAndGender(canvas, resizedDetections);
+  let isLeftHandDetected = false, isRightHandDetected = false;
+  let leftHandY = 0, rightHandY = 0;
 
-          if (detections.length > 0) {
-            const age = detections[0].age;
-            ageInfo.textContent = `Usia: ${Math.round(age)} tahun`;
-          }
-        }, 100);
-      };
+  // Setup untuk MediaPipe Hands
+  const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+  hands.setOptions({
+    maxNumHands: 2,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
+  });
+
+  hands.onResults(onResults);
+
+  // Mengakses kamera pengguna
+  async function setupCamera() {
+    const video = document.createElement("video");
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: 640, height: 480 }
+    });
+    video.srcObject = stream;
+    await new Promise((resolve) => { video.onloadedmetadata = resolve; });
+    video.play();
+
+    const canvasElement = document.createElement("canvas");
+    const canvasCtx = canvasElement.getContext("2d");
+
+    function detectHands() {
+      canvasElement.width = video.videoWidth;
+      canvasElement.height = video.videoHeight;
+      canvasCtx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+      hands.send({image: canvasElement});
+      requestAnimationFrame(detectHands);
     }
 
-    // Muat model dan mulai aplikasi
-    setup();
-  </script>
+    detectHands();
+  }
+
+  // Fungsi untuk menggambar game
+  function drawGame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Gambar bola
+    ctx.beginPath();
+    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.closePath();
+
+    // Gambar paddle kiri
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
+
+    // Gambar paddle kanan
+    ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
+
+    // Gerakan bola
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+
+    // Pantulkan bola pada dinding atas dan bawah
+    if (ballY - ballRadius < 0 || ballY + ballRadius > canvas.height) {
+      ballSpeedY = -ballSpeedY;
+    }
+
+    // Pantulkan bola pada paddle kiri
+    if (ballX - ballRadius < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
+      ballSpeedX = -ballSpeedX;
+    }
+
+    // Pantulkan bola pada paddle kanan
+    if (ballX + ballRadius > canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+      ballSpeedX = -ballSpeedX;
+    }
+
+    // Jika bola keluar dari kanan atau kiri
+    if (ballX - ballRadius < 0 || ballX + ballRadius > canvas.width) {
+      resetBall();
+    }
+
+    // Gerakan paddle kiri sesuai dengan tangan kiri
+    if (isLeftHandDetected) {
+      leftPaddleY = Math.min(Math.max(leftHandY - paddleHeight / 2, 0), canvas.height - paddleHeight);
+    }
+
+    // Gerakan paddle kanan sesuai dengan tangan kanan
+    if (isRightHandDetected) {
+      rightPaddleY = Math.min(Math.max(rightHandY - paddleHeight / 2, 0), canvas.height - paddleHeight);
+    }
+  }
+
+  // Reset bola ke tengah
+  function resetBall() {
+    ballX = canvas.width / 2;
+    ballY = canvas.height / 2;
+    ballSpeedX = -ballSpeedX;
+    ballSpeedY = speed;
+  }
+
+  // Fungsi hasil deteksi dari MediaPipe Hands
+  function onResults(results) {
+    if (results.multiHandLandmarks) {
+      // Cek jika tangan kiri terdeteksi
+      if (results.multiHandLandmarks[0]) {
+        leftHandY = results.multiHandLandmarks[0][9].y * canvas.height;
+        isLeftHandDetected = true;
+      } else {
+        isLeftHandDetected = false;
+      }
+
+      // Cek jika tangan kanan terdeteksi
+      if (results.multiHandLandmarks[1]) {
+        rightHandY = results.multiHandLandmarks[1][9].y * canvas.height;
+        isRightHandDetected = true;
+      } else {
+        isRightHandDetected = false;
+      }
+    }
+  }
+
+  // Mulai permainan dan setup kamera
+  setupCamera();
+
+  // Main game loop
+  function gameLoop() {
+    drawGame();
+    requestAnimationFrame(gameLoop);
+  }
+
+  gameLoop();
+</script>
+
 </body>
 </html>
