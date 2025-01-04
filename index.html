@@ -3,24 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pingpong dengan Tracking Tangan</title>
+  <title>Pingpong dengan Tracking Tangan dan Titik Landmark</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #000;
+      overflow: hidden;
     }
+
     canvas {
-      display: block;
-      margin: 0 auto;
-      background-color: #222;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    #videoElement {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      transform: scaleX(-1); /* Flip video horizontally for better hand tracking */
     }
   </style>
 </head>
 <body>
 
-<canvas id="pingpongGame" width="800" height="600"></canvas>
+<video id="videoElement" width="640" height="480" autoplay muted></video>
+<canvas id="pingpongGame" width="640" height="480"></canvas>
 
 <!-- Memuat MediaPipe untuk pelacakan tangan -->
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
@@ -43,7 +54,9 @@
   let leftHandY = 0, rightHandY = 0;
 
   // Setup untuk MediaPipe Hands
-  const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+  const hands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  });
   hands.setOptions({
     maxNumHands: 2,
     modelComplexity: 1,
@@ -55,13 +68,11 @@
 
   // Mengakses kamera pengguna
   async function setupCamera() {
-    const video = document.createElement("video");
+    const video = document.getElementById("videoElement");
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { width: 640, height: 480 }
     });
     video.srcObject = stream;
-    await new Promise((resolve) => { video.onloadedmetadata = resolve; });
-    video.play();
 
     const canvasElement = document.createElement("canvas");
     const canvasCtx = canvasElement.getContext("2d");
@@ -70,7 +81,7 @@
       canvasElement.width = video.videoWidth;
       canvasElement.height = video.videoHeight;
       canvasCtx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-      hands.send({image: canvasElement});
+      hands.send({ image: canvasElement });
       requestAnimationFrame(detectHands);
     }
 
@@ -79,6 +90,7 @@
 
   // Fungsi untuk menggambar game
   function drawGame() {
+    // Gambar latar belakang dengan video feed
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Gambar bola
@@ -143,7 +155,7 @@
     if (results.multiHandLandmarks) {
       // Cek jika tangan kiri terdeteksi
       if (results.multiHandLandmarks[0]) {
-        leftHandY = results.multiHandLandmarks[0][9].y * canvas.height;
+        leftHandY = results.multiHandLandmarks[0][9].y * canvas.height; // Landmark untuk pergelangan tangan
         isLeftHandDetected = true;
       } else {
         isLeftHandDetected = false;
@@ -151,12 +163,30 @@
 
       // Cek jika tangan kanan terdeteksi
       if (results.multiHandLandmarks[1]) {
-        rightHandY = results.multiHandLandmarks[1][9].y * canvas.height;
+        rightHandY = results.multiHandLandmarks[1][9].y * canvas.height; // Landmark untuk pergelangan tangan
         isRightHandDetected = true;
       } else {
         isRightHandDetected = false;
       }
+
+      // Gambar titik-titik di setiap landmark tangan
+      drawLandmarks(results.multiHandLandmarks);
     }
+  }
+
+  // Gambar titik pada setiap landmark tangan
+  function drawLandmarks(handLandmarks) {
+    handLandmarks.forEach((landmarks) => {
+      for (let i = 0; i < landmarks.length; i++) {
+        const x = landmarks[i].x * canvas.width;
+        const y = landmarks[i].y * canvas.height;
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);  // Gambar titik
+        ctx.fillStyle = "red";  // Warna titik
+        ctx.fill();
+        ctx.closePath();
+      }
+    });
   }
 
   // Mulai permainan dan setup kamera
