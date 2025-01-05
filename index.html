@@ -1,114 +1,172 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PREMIUM video</title>
+    <title>EVIN.COM</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
         }
 
-        /* Video container yang mengandung semua video */
+          /* Styling untuk tombol Customer Service */
+          .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745; /* Warna tombol (misalnya hijau) */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+        }
+
+        .floating-btn:hover {
+            background-color: #218838; /* Warna tombol saat hover */
+        }
+
+        /* Popup style */
+        .popup {
+            display: none; /* Pop-up disembunyikan secara default */
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .popup h3 {
+            margin-bottom: 8px;
+            font-size: 8px;
+            color: #333;
+        }
+
+
+        
+
+        /*POP UP PERINGATAN BELUM PREMIUM*/
+        .message-box {
+            display: none;
+            position: fixed;
+            top: 245px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+
+        .message-box.active {
+            display: block;
+        }
+        /* Menata navbar */
+        nav {
+            width: 76, 5vh;
+            height: 11, 5vh;
+            background-color: #0510a8;
+            font-family: Arial, sans-serif;
+            padding: 0px;
+        }
+       /* Mengatur menu dengan Flexbox */
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        /* Menata tiap list item */
+        nav ul li {
+            margin: 0;
+        }
+
+        /* Menata link */
+        nav ul li a {
+            display: block;
+            padding: 20px 25px;
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            text-align: center;
+        }
+
+        /* Efek hover pada menu */
+        nav ul li:hover {
+            background-color: #db1da2;
+            border-radius: 4px;
+        }
+
+        nav ul li:hover a {
+            color: #000;
+        }
+
+        /* Menata tulisan ATAS */
+        h2 {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #000a97;
+            color: goldenrod;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            letter-spacing: 4px;
+            padding: 5px 0;
+            background-color: #000ed6;
+        }
+
+        /* Mengatur Video Section agar mengisi layar penuh */
         .video-container {
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            pointer-events: none; /* Menonaktifkan interaksi dengan video sebelum login */
-            filter: blur(10px); /* Blur background */
-            transition: filter 0.3s ease-in-out; /* Transisi halus untuk blur */
+            height: 115vh;
+            overflow-y: scroll; /* Memungkinkan scroll antar video */
+            scroll-snap-type: y mandatory; /* Menjamin scroll satu video per scroll */
         }
 
         .video-section {
-            text-align: center;
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            scroll-snap-align: start;
-        }
-
-        .video-section h2 {
-            color: white;
-            background-color: blue;
-            font-size: 30px;
-            text-align: center;
-            position: absolute;
-            width: 100%;
-            padding: 10px;
-            top: 20px;
-            left: 0;
-            z-index: 10;
-            font-weight: bold;
-            color: yellow;
+            scroll-snap-align: start; /* Menyelaraskan video ke atas saat scroll */
+            background-color: #000; /* Latar belakang hitam */
         }
 
         .video-section video {
-            width: 100%;
-            height: 95vh;
-            object-fit: cover;
-            transition: opacity 0.3s ease-out; /* Menambahkan transisi halus pada opacity */
+            width: 100vw; /* Video memenuhi lebar layar */
+            height: 82vh; /* Video memenuhi tinggi layar */
+            object-fit: cover; /* Agar video tetap proporsional dan memenuhi layar */
         }
 
-        /* Form login yang mengambang di atas konten */
-        .login-container {
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
+        /* Menata footer */
+        footer {
+            background-color: #00158f;
+            color: white;
             text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10; /* pastikan z-index tidak menutup popup */
-            transition: filter 0.3s ease-in-out;
-        }
-
-        .login-container h2 {
-            margin-bottom: 20px;
-        }
-
-        .login-container input {
-            width: 100%;
             padding: 0px;
-            margin-bottom: 10px;
-            border-radius: 3px;
-            border: 3px solid #ddd;
-            font-size: 16px;
-        }
-
-        .login-container button {
+            margin-top: 100vh;
             width: 100%;
-            padding: 5px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
         }
 
-        .login-container button:hover {
-            background-color: #45a049;
-        }
-
-        .error-message {
-            color: red;
-            margin-top: 10px;
-            display: none;
-        }
-
-        /* Popup styling */
+        /* POP UP SELAMAT DATANG */
         .popup {
             position: fixed;
             top: 50%;
@@ -116,309 +174,250 @@
             transform: translate(-50%, -50%);
             background-color: #ffffff;
             padding: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 11px;
+            border: 2px solid #9c9b9b;
+            border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 80%;
+            width: 50%;
             max-width: 400px;
             text-align: center;
-            z-index: 100; /* pastikan popup berada di atas form login */
+            z-index: 1000;
+            display: none;
+        }
+
+        /* Tombol close (silang) SELAMAT DATANG */
+        .close-btn {
+            position: absolute;
+            top: 1px;
+            right: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #020301;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Background hitam transparan di luar popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
             display: none;
         }
 
         .popup h3 {
             color: #000000;
-            font-size: 20px;
+            font-size: 10px;
             font-weight: bold;
         }
-
-        .popup p {
-            margin-top: 10px;
-            color: #555;
-        }
-
-        .popup .countdown {
-            font-size: 18px;
-            color: #ff0000;
-            font-weight: bold;
-        }
-
-        /* Menu Dropdown */
-        .menu {
-            position: absolute;
-            top: 7px;
-            right: 18px;
-            cursor: pointer;
-            z-index: 1000;
-            display: none; /* Menyembunyikan menu saat login */
-        }
-
-        .menu-icon {
-            width: 30px;
-            height: 3px;
-            background-color: #333;
-            margin: 6px 0;
-            transition: 0.4s;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 20px;
-            right: 0;
-            background-color: rgb(255, 255, 255);
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            padding: 10px;
-            width: 100px;
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            color: rgb(0, 0, 0);
-            padding: 10px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        .dropdown-menu a img {
-            margin-right: 8px;
-            width: 16px; /* Sesuaikan ukuran gambar */
-            height: 16px;
-        }
-
-        .dropdown-menu a:hover {
-            background-color: #ffffff;
-        }
-
-        /* Transformasi garis menjadi X saat menu aktif */
-        .menu.open .menu-icon:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-
-        .menu.open .menu-icon:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu.open .menu-icon:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
-
     </style>
-</head>
-<body>
+<!-------------------------------------------------------------------------------------------------->
+<!--------------------------------------------------HTML-------------------------------------------->
+<!-------------------------------------------------------------------------------------------------->
 
-    <!-- Tombol Menu Garis Tiga -->
-    <div class="menu" id="menu-toggle">
-        <div class="menu-icon"></div>
-        <div class="menu-icon"></div>
-        <div class="menu-icon"></div>
+
+
+    <!--PERINGATAN BELUM PREMIUM-->
+    <div class="message-box" id="alertBox">
+        <strong>Peringatan!</strong> "Anda saat ini sedang menggunakan fitur gratis. Segera tingkatkan ke premium agar mendapatkan video VIP tanpa iklan."
     </div>
+    <!--PERINGATAN BELUM PREMIUM-->
 
-    <div class="dropdown-menu" id="dropdown-menu">
-        <a href="#" onclick="switchToFreeMode()">
-            <img src="EXIT.png" alt="Keluar">
-            Keluar
-        </a>
-    </div>
 
-    <!-- Formulir Masuk -->
-    <div class="login-container" id="login-form">
-        <h2>Masuk untuk melihat konten VIP</h2>
-        <input type="text" id="username" placeholder="Nama Pengguna" required>
-        <input type="password" id="password" placeholder="Kata Sandi" required>
-        <button onclick="validateLogin()">Masuk</button>
-        <p class="error-message" id="error-message">Nama pengguna atau kata sandi salah.</p>
-    </div>
+    <!--JUDUL SITUS-->
+    <h2>YT:MYKEP</h2>
+    <!--JUDUL SITUS-->
 
-    <!-- Bagian Video -->
-    <div class="video-container" id="video-container">
+
+    <!--BAR NAVIGASI-->
+    <nav>
+        <ul>
+            <li><a href="index.html">VIDEO GRATIS</a></li>
+            <li><a href="PREMIUM.html">VIDEO PREMIUM</a></li>
+        </ul>
+    </nav>
+    <!--BAR NAVIGASI-->
+
+
+    <!-------------------------------Video Section Container ------------------------------->
+    <div class="video-container">
+        
+        <!--CONTENT 4-->
         <div class="video-section">
-            <video class="video-item" id="video1" controls>
+            <video class="video-player" controls="">
                 <source src="TikTok - Make Your Day.mp4" type="video/mp4">
-                Browser Anda tidak mendukung tag video.
+                Your browser does not support the video tag.
             </video>
         </div>
+
+        <!--CONTENT 3-->
         <div class="video-section">
-            <video class="video-item" id="video2" controls>
+            <video class="video-player" controls="">
                 <source src="TikTok - Make Your Day_2.mp4" type="video/mp4">
-                Browser Anda tidak mendukung tag video.
+                Your browser does not support the video tag.
             </video>
         </div>
+
+        <!--CONTENT 2-->
         <div class="video-section">
-            <video class="video-item" id="video3" controls>
+            <video class="video-player" controls="">
                 <source src="TikTok - Make Your Day_3.mp4" type="video/mp4">
-                Browser Anda tidak mendukung tag video.
+                Your browser does not support the video tag.
             </video>
         </div>
+
+        <!--CONTENT 1-->
         <div class="video-section">
-            <video class="video-item" id="video4" controls>
+            <video class="video-player" controls="">
                 <source src="TikTok - Make Your Day_4.mp4" type="video/mp4">
-                Browser Anda tidak mendukung tag video.
+                Your browser does not support the video tag.
             </video>
         </div>
     </div>
 
-    <!-- Popup untuk memberitahu kesalahan login -->
-    <div class="popup" id="popup">
-        <h3>Kesalahan Masuk!</h3>
-        <p>Anda telah mencoba 5 kali masuk dengan kata sandi yang salah. Harap tunggu selama <span id="countdown-timer" class="countdown">15</span> detik atau hubungi nomor berikut untuk berlangganan konten Premium:</p>
-        <p><strong>09238459589053</strong></p>
-    </div>
+      <!-------------------------------Video Section Container ------------------------------->
 
-    <script>
-        const validUsers = 
-        [
-            { username: "1", password: "1" },
-            { username: "user1", password: "mypassword" },
-            { username: "user2", password: "securepassword" }
-        ];
-    
-        let attemptCount = 0;
-        let lockoutTime = 0;
-        let countdownInterval;
-    
-        // Fungsi untuk validasi masuk
-        function validateLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-    
-            if (lockoutTime > 0) {
-                return;
-            }
-    
-            const user = validUsers.find(user => user.username === username && user.password === password);
-    
-            if (user) {
-                // Menyembunyikan form login dan menampilkan video
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('video-container').style.display = 'block';
-                document.getElementById('error-message').style.display = 'none';
-                clearInterval(countdownInterval);
-                document.getElementById('popup').style.display = 'none';
-    
-                document.getElementById('video-container').style.filter = 'none';
-                document.getElementById('video-container').style.pointerEvents = 'auto';
-    
-                // Memulai video pertama
-                const firstVideo = document.getElementById('video1');
-                firstVideo.play();
-    
-                // Tampilkan menu setelah login
-                document.getElementById('menu-toggle').style.display = 'block';
-                
-                // Menyimpan status login
-                localStorage.setItem('loggedIn', 'true');
-            } else {
-                attemptCount++;
-                document.getElementById('error-message').style.display = 'block';
-    
-                if (attemptCount >= 5) {
-                    lockoutTime = 15;
-                    attemptCount = 0;
-                    document.getElementById('error-message').style.display = 'none';
-                    startCountdown();
-                    showPopup();
-                }
-            }
-        }
-    
-        // Menampilkan dan menyembunyikan dropdown menu
-        const menuToggle = document.getElementById('menu-toggle');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-    
-        menuToggle.addEventListener('click', function() {
-            menuToggle.classList.toggle('open');
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-        });
-    
-        // Fungsi untuk kembali ke Mode Gratis
-        function switchToFreeMode() {
-            // Logout dan mengarahkan ke index.html
-            localStorage.removeItem('loggedIn'); // Menghapus status login
-            window.location.href = 'index.html';
-        }
-    
-        // Fungsi untuk logout
-        function logout() {
-            localStorage.removeItem('loggedIn');
-            window.location.href = 'index.html'; // Kembali ke halaman index.html
-        }
-    
-        // Mengamati video agar autoplay dan berhenti jika video lain yang diputar
-        const videos = document.querySelectorAll('.video-item');
-        let currentVideo = null;
-    
+
+   <!--POP UP SELAMAT DATANG-->
+    <div class="popup-overlay" style="display: none;"></div>
+    <div class="popup" style="display: none;">
+        <button class="close-btn" onclick="closePopup()">×</button>
+        <h3>SELAMAT DATANG DI SITUS</h3>
+        <h4>YT:MYKEP</h4>
+        <p>Situs Ini di buat oleh</p><p>
+        </p><h4>MR.CICADA</h4> 
+        <p></p>!hanya untuk Edukasi Saja!<p></p>
+    </div>
+<!--POP UP SELAMAT DATANG-->
+
+<!-- Tombol Floating Customer Service -->
+<button class="floating-btn" id="customerServiceBtn">
+    <i>?</i>
+</button>
+
+<!-- Popup Overlay dan Customer Service Pop-up -->
+<div class="popup-overlay" id="popupOverlay"></div>
+<div class="popup" id="popup">
+    <h3>Hubungi Customer Service</h3>
+    <button onclick="openWhatsApp()">Chat di WhatsApp</button>
+    <button onclick="openEmail()">Email Kami</button>
+</div>
+
+    <!--UJUNG BAWAH SITUS-->
+    <footer>
+        <p>© 2025 CICADA.CORXY</p>
+    </footer>
+  <!--UJUNG BAWAH SITUS-->
+
+
+<!-------------------------------------------------------------------------------------------------->
+<!--------------------------------------------------JAVA SCRIPT------------------------------------->
+<!-------------------------------------------------------------------------------------------------->
+
+<script>
+
+        // Fungsi untuk menampilkan popup
+    function showAlert() {
+        // Menampilkan pesan di layar
+        const alertBox = document.getElementById('alertBox');
+        alertBox.classList.add('active');
+        
+        // Menghilangkan pesan setelah 3 detik
+        setTimeout(function() {
+            alertBox.classList.remove('active');
+        }, 10000); // Menghilangkan peringatan premium setelah 10 detik
+    }
+
+    // Fungsi untuk menampilkan peringatan di konsol
+    function showConsoleWarning() {
+        console.warn("Peringatan: 60 detik telah berlalu!");
+    }
+
+    // Fungsi utama untuk mengatur popup dan peringatan setiap 45 detik
+    setInterval(function() {
+        showAlert(); // Menampilkan popup
+        showConsoleWarning(); // Menampilkan peringatan di konsol
+    }, 45000); // Muncul Setiap 45 detik
+
+     // Ambil semua elemen video
+        const videos = document.querySelectorAll('.video-player');
+
+        // Buat observer untuk mendeteksi video yang terlihat di layar
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 const video = entry.target;
-    
                 if (entry.isIntersecting) {
-                    video.play(); // Play video saat masuk viewport
-                    if (currentVideo && currentVideo !== video) {
-                        currentVideo.pause(); // Pause video lain jika ada
-                    }
-                    currentVideo = video;
+                    // Jika video terlihat, mulai memainkan
+                    video.play();
                 } else {
-                    video.pause(); // Pause video saat keluar dari viewport
+                    // Jika video tidak terlihat, hentikan
+                    video.pause();
+                    video.currentTime = 0; // Reset video ke awal
                 }
             });
-        }, {
-            threshold: 0.5 // Video harus lebih dari 50% terlihat untuk memulai autoplay
-        });
-    
-        // Observer semua video
+        }, { threshold: 0.5 }); // threshold 0.5 berarti video harus setidaknya 50% terlihat di layar
+
+        // Mulai observer untuk setiap video
         videos.forEach(video => {
             observer.observe(video);
         });
-    
-        // Fungsi untuk menangani countdown popup
-        function startCountdown() {
-            const countdownElem = document.getElementById('countdown-timer');
-            let countdownTime = lockoutTime;
-    
-            // Simpan waktu countdown ke localStorage agar bisa dipertahankan
-            localStorage.setItem('lockoutTime', countdownTime);
-    
-            countdownInterval = setInterval(function () {
-                countdownElem.textContent = countdownTime;
-                countdownTime--;
-                localStorage.setItem('lockoutTime', countdownTime); // Update waktu di localStorage
-    
-                if (countdownTime < 0) {
-                    clearInterval(countdownInterval);
-                    document.getElementById('popup').style.display = 'none';  // Sembunyikan popup setelah hitungan selesai
-                    document.getElementById('login-form').style.display = 'block';  // Tampilkan kembali form login
-                    lockoutTime = 0;
-                    document.getElementById('error-message').style.display = 'none';
-                }
-            }, 1000);
-        }
-    
-        function showPopup() {
-            document.getElementById('popup').style.display = 'block';  // Menampilkan popup
-        }
-    
-        // Cek apakah pengguna sudah login
+
+        // Fungsi untuk menampilkan popup dan overlay
         window.onload = function() {
-            // Ambil nilai lockoutTime dari localStorage saat halaman dimuat
-            const savedLockoutTime = localStorage.getItem('lockoutTime');
-            if (savedLockoutTime && savedLockoutTime > 0) {
-                lockoutTime = parseInt(savedLockoutTime);
-                startCountdown();
-                showPopup();
-            }
-    
-            if (localStorage.getItem('loggedIn') === 'true') {
-                // Menampilkan video dan menu jika sudah login
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('video-container').style.display = 'block';
-                document.getElementById('menu-toggle').style.display = 'block';
-                document.getElementById('video-container').style.filter = 'none';
-                document.getElementById('video-container').style.pointerEvents = 'auto';
-            }
+            document.querySelector('.popup').style.display = 'block';
+            document.querySelector('.popup-overlay').style.display = 'block';
         }
+
+        // Fungsi untuk menutup popup dan overlay
+        function closePopup() {
+            document.querySelector('.popup').style.display = 'none';
+            document.querySelector('.popup-overlay').style.display = 'none';
+        }
+        
+
+         // Menampilkan atau menyembunyikan popup saat tombol customer service diklik
+         document.getElementById('customerServiceBtn').addEventListener('click', function() {
+            const popup = document.getElementById('popup');
+            const overlay = document.getElementById('popupOverlay');
+            const isPopupVisible = popup.style.display === 'block';
+
+            // Menampilkan atau menyembunyikan pop-up dan overlay
+            if (isPopupVisible) {
+                popup.style.display = 'none';
+                overlay.style.display = 'none';
+            } else {
+                popup.style.display = 'block';
+                overlay.style.display = 'block';
+            }
+        });
+
+        // Fungsi untuk membuka WhatsApp
+        function openWhatsApp() {
+            const phoneNumber = '6281234567890'; // Ganti dengan nomor WhatsApp Anda
+            const message = 'Halo, saya ingin bertanya mengenai layanan Anda.'; // Pesan otomatis yang ingin dikirim
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // Fungsi untuk membuka aplikasi email
+        function openEmail() {
+            const email = 'support@domain.com'; // Ganti dengan alamat email Anda
+            const subject = 'Pertanyaan Mengenai Layanan';
+            const body = 'Halo, saya ingin bertanya mengenai layanan Anda.';
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        // Menutup popup jika overlay diklik
+        document.getElementById('popupOverlay').addEventListener('click', function() {
+            const popup = document.getElementById('popup');
+            const overlay = document.getElementById('popupOverlay');
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
     </script>
-</body>
-</html>
