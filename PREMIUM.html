@@ -82,8 +82,8 @@
             width: 100%;
             padding: 0px;
             margin-bottom: 10px;
-            border-radius: 5px;
-            border: 5px solid #ddd;
+            border-radius: 3px;
+            border: 3px solid #ddd;
             font-size: 16px;
         }
 
@@ -143,13 +143,79 @@
             font-weight: bold;
         }
 
+        /* Menu Dropdown */
+        .menu {
+            position: absolute;
+            top: 7px;
+            right: 18px;
+            cursor: pointer;
+            z-index: 1000;
+            display: none; /* Menyembunyikan menu saat login */
+        }
+
+        .menu-icon {
+            width: 30px;
+            height: 3px;
+            background-color: #333;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position:absolute;
+            top: 20px;
+            right: 0;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            width: 100px;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            color: rgb(0, 0, 0);
+            padding: 10px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #ffffff;
+        }
+
+        /* Transformasi garis menjadi X saat menu aktif */
+        .menu.open .menu-icon:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .menu.open .menu-icon:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu.open .menu-icon:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
     </style>
 </head>
 <body>
 
+    <!-- Tombol Menu Garis Tiga -->
+    <div class="menu" id="menu-toggle">
+        <div class="menu-icon"></div>
+        <div class="menu-icon"></div>
+        <div class="menu-icon"></div>
+    </div>
+
+     <div class="dropdown-menu" id="dropdown-menu">
+        <a href="#" onclick="switchToFreeMode()">Keluar</a>
+    </div>
+
     <!-- Formulir Masuk -->
     <div class="login-container" id="login-form">
-        <h2>Masuk untuk melihat konten Premium</h2>
+        <h2>Masuk untuk melihat konten VIP</h2>
         <input type="text" id="username" placeholder="Nama Pengguna" required>
         <input type="password" id="password" placeholder="Kata Sandi" required>
         <button onclick="validateLogin()">Masuk</button>
@@ -177,17 +243,11 @@
             </video>
         </div>
         <div class="video-section">
-            <video class="video-item" id="video1" controls>
+            <video class="video-item" id="video4" controls>
                 <source src="TikTok - Make Your Day_4.mp4" type="video/mp4">
                 Browser Anda tidak mendukung tag video.
             </video>
-
-
-
-
-
-
-
+        </div>
     </div>
 
     <!-- Popup untuk memberitahu kesalahan login -->
@@ -198,49 +258,52 @@
     </div>
 
     <script>
-        // Data nama pengguna dan kata sandi yang valid
-        const validUsers = [
+        const validUsers = 
+        [
             { username: "1", password: "1" },
             { username: "user1", password: "mypassword" },
             { username: "user2", password: "securepassword" }
         ];
-
-        // Variabel untuk membatasi jumlah percakapan masuk
+    
         let attemptCount = 0;
         let lockoutTime = 0;
         let countdownInterval;
-
+    
         // Fungsi untuk validasi masuk
         function validateLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-
-            // Cek jika terdapat percakapan waktu penutupan akun
+    
             if (lockoutTime > 0) {
-                return;  // Tidak lakukan login jika dalam masa lockout
+                return;
             }
-
+    
             const user = validUsers.find(user => user.username === username && user.password === password);
-
+    
             if (user) {
-                // Menghilangkan form login dan menampilkan video
+                // Menyembunyikan form login dan menampilkan video
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('video-container').style.display = 'block';
                 document.getElementById('error-message').style.display = 'none';
                 clearInterval(countdownInterval);
                 document.getElementById('popup').style.display = 'none';
-
-                // Menghapus blur dan mengaktifkan interaksi dengan video
+    
                 document.getElementById('video-container').style.filter = 'none';
                 document.getElementById('video-container').style.pointerEvents = 'auto';
-
-                // Memulai video pertama setelah login
+    
+                // Memulai video pertama
                 const firstVideo = document.getElementById('video1');
-                firstVideo.play(); // Play video pertama
+                firstVideo.play();
+    
+                // Tampilkan menu setelah login
+                document.getElementById('menu-toggle').style.display = 'block';
+                
+                // Menyimpan status login
+                localStorage.setItem('loggedIn', 'true');
             } else {
                 attemptCount++;
                 document.getElementById('error-message').style.display = 'block';
-
+    
                 if (attemptCount >= 5) {
                     lockoutTime = 15;
                     attemptCount = 0;
@@ -250,36 +313,37 @@
                 }
             }
         }
-
-        function showPopup() {
-            document.getElementById('popup').style.display = 'block';  // Menampilkan popup
+    
+        // Menampilkan dan menyembunyikan dropdown menu
+        const menuToggle = document.getElementById('menu-toggle');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+    
+        menuToggle.addEventListener('click', function() {
+            menuToggle.classList.toggle('open');
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
+    
+        // Fungsi untuk kembali ke Mode Gratis
+        function switchToFreeMode() {
+            // Logout dan mengarahkan ke index.html
+            localStorage.removeItem('loggedIn'); // Menghapus status login
+            window.location.href = 'index.html';
         }
-
-        function startCountdown() {
-            const countdownElem = document.getElementById('countdown-timer');
-            let countdownTime = lockoutTime;
-
-            countdownInterval = setInterval(function () {
-                countdownElem.textContent = countdownTime;
-                countdownTime--;
-                if (countdownTime < 0) {
-                    clearInterval(countdownInterval);
-                    document.getElementById('popup').style.display = 'none';  // Sembunyikan popup setelah hitungan selesai
-                    document.getElementById('login-form').style.display = 'block';  // Tampilkan kembali form login
-                    lockoutTime = 0;
-                    document.getElementById('error-message').style.display = 'none';
-                }
-            }, 1000);
+    
+        // Fungsi untuk logout
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            window.location.href = 'index.html'; // Kembali ke halaman index.html
         }
-
+    
         // Mengamati video agar autoplay dan berhenti jika video lain yang diputar
         const videos = document.querySelectorAll('.video-item');
         let currentVideo = null;
-
+    
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 const video = entry.target;
-
+    
                 if (entry.isIntersecting) {
                     video.play(); // Play video saat masuk viewport
                     if (currentVideo && currentVideo !== video) {
@@ -293,12 +357,58 @@
         }, {
             threshold: 0.5 // Video harus lebih dari 50% terlihat untuk memulai autoplay
         });
-
+    
         // Observer semua video
         videos.forEach(video => {
             observer.observe(video);
         });
-
+    
+        // Fungsi untuk menangani countdown popup
+        function startCountdown() {
+            const countdownElem = document.getElementById('countdown-timer');
+            let countdownTime = lockoutTime;
+    
+            // Simpan waktu countdown ke localStorage agar bisa dipertahankan
+            localStorage.setItem('lockoutTime', countdownTime);
+    
+            countdownInterval = setInterval(function () {
+                countdownElem.textContent = countdownTime;
+                countdownTime--;
+                localStorage.setItem('lockoutTime', countdownTime); // Update waktu di localStorage
+    
+                if (countdownTime < 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('popup').style.display = 'none';  // Sembunyikan popup setelah hitungan selesai
+                    document.getElementById('login-form').style.display = 'block';  // Tampilkan kembali form login
+                    lockoutTime = 0;
+                    document.getElementById('error-message').style.display = 'none';
+                }
+            }, 1000);
+        }
+    
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';  // Menampilkan popup
+        }
+    
+        // Cek apakah pengguna sudah login
+        window.onload = function() {
+            // Ambil nilai lockoutTime dari localStorage saat halaman dimuat
+            const savedLockoutTime = localStorage.getItem('lockoutTime');
+            if (savedLockoutTime && savedLockoutTime > 0) {
+                lockoutTime = parseInt(savedLockoutTime);
+                startCountdown();
+                showPopup();
+            }
+    
+            if (localStorage.getItem('loggedIn') === 'true') {
+                // Menampilkan video dan menu jika sudah login
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('video-container').style.display = 'block';
+                document.getElementById('menu-toggle').style.display = 'block';
+                document.getElementById('video-container').style.filter = 'none';
+                document.getElementById('video-container').style.pointerEvents = 'auto';
+            }
+        }
     </script>
-</body>
-</html>
+    </body>
+    </html>
