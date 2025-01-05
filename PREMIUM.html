@@ -163,7 +163,7 @@
 
         .dropdown-menu {
             display: none;
-            position:absolute;
+            position: absolute;
             top: 20px;
             right: 0;
             background-color: rgb(255, 255, 255);
@@ -174,11 +174,18 @@
         }
 
         .dropdown-menu a {
-            display: block;
+            display: flex;
+            align-items: center;
             color: rgb(0, 0, 0);
             padding: 10px;
             text-decoration: none;
             font-size: 16px;
+        }
+
+        .dropdown-menu a img {
+            margin-right: 8px;
+            width: 16px; /* Sesuaikan ukuran gambar */
+            height: 16px;
         }
 
         .dropdown-menu a:hover {
@@ -209,8 +216,11 @@
         <div class="menu-icon"></div>
     </div>
 
-     <div class="dropdown-menu" id="dropdown-menu">
-        <a href="#" onclick="switchToFreeMode()">Keluar</a>
+    <div class="dropdown-menu" id="dropdown-menu">
+        <a href="#" onclick="switchToFreeMode()">
+            <img src="EXIT.png" alt="Keluar">
+            Keluar
+        </a>
     </div>
 
     <!-- Formulir Masuk -->
@@ -410,5 +420,5 @@
             }
         }
     </script>
-    </body>
-    </html>
+</body>
+</html>
