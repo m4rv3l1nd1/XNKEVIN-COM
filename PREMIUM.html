@@ -162,16 +162,17 @@
         }
 
         .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 20px;
-            right: 0;
-            background-color: rgb(255, 255, 255);
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            padding: 10px;
-            width: 100px;
-        }
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    width: 100px;
+    z-index: 9999; /* Ensure it is on top of other elements */
+}
 
         .dropdown-menu a {
             display: flex;
@@ -328,11 +329,10 @@
         const menuToggle = document.getElementById('menu-toggle');
         const dropdownMenu = document.getElementById('dropdown-menu');
     
-        menuToggle.addEventListener('click', function() {
-            menuToggle.classList.toggle('open');
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-        });
-    
+     menuToggle.addEventListener('click', function() {
+    menuToggle.classList.toggle('open');
+    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+});
         // Fungsi untuk kembali ke Mode Gratis
         function switchToFreeMode() {
             // Logout dan mengarahkan ke index.html
