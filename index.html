@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,15 +10,84 @@
             box-sizing: border-box;
         }
 
-        /* Menata navbar */
-        nav {
-            width: 100%;
-            background-color: #0510a8;
-            font-family: Arial, sans-serif;
-            padding: 0;
+          /* Styling untuk tombol Customer Service */
+          .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745; /* Warna tombol (misalnya hijau) */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
         }
 
-        /* Mengatur menu dengan Flexbox */
+        .floating-btn:hover {
+            background-color: #218838; /* Warna tombol saat hover */
+        }
+
+        /* Popup style */
+        .popup {
+            display: none; /* Pop-up disembunyikan secara default */
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .popup h3 {
+            margin-bottom: 8px;
+            font-size: 8px;
+            color: #333;
+        }
+
+
+        
+
+        /*POP UP PERINGATAN BELUM PREMIUM*/
+        .message-box {
+            display: none;
+            position: fixed;
+            top: 240px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+            text-align: center;
+        }
+
+        .message-box.active {
+            display: block;
+        }
+        /* Menata navbar */
+        nav {
+            width: 76, 5vh;
+            height: 11, 5vh;
+            background-color: #0510a8;
+            font-family: Arial, sans-serif;
+            padding: 0px;
+        }
+       /* Mengatur menu dengan Flexbox */
         nav ul {
             display: flex;
             justify-content: center;
@@ -44,40 +111,33 @@
         /* Efek hover pada menu */
         nav ul li:hover {
             background-color: #db1da2;
-            border-radius: 10px;
+            border-radius: 4px;
         }
 
         nav ul li:hover a {
             color: #000;
         }
 
-        /* Menata tulisan h2 */
+        /* Menata tulisan ATAS */
         h2 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             text-align: center;
             background-color: #000a97;
-            color: #ffee00;
+            color: goldenrod;
             margin-top: 0px;
             margin-bottom: 0px;
             letter-spacing: 2px;
             padding: 5px 0;
             animation: blink 2s infinite;
-            background-color: #b90b94;
-        }
-
-        /* Animasi berkedip */
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-            100% { opacity: 1; }
+            background-color: #000ed6;
         }
 
         /* Mengatur Video Section agar mengisi layar penuh */
         .video-container {
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 115vh;
             overflow-y: scroll; /* Memungkinkan scroll antar video */
             scroll-snap-type: y mandatory; /* Menjamin scroll satu video per scroll */
         }
@@ -93,7 +153,7 @@
 
         .video-section video {
             width: 100vw; /* Video memenuhi lebar layar */
-            height: 100vh; /* Video memenuhi tinggi layar */
+            height: 81vh; /* Video memenuhi tinggi layar */
             object-fit: cover; /* Agar video tetap proporsional dan memenuhi layar */
         }
 
@@ -102,11 +162,12 @@
             background-color: #00158f;
             color: white;
             text-align: center;
-            padding: 10px 0;
+            padding: 0px;
+            margin-top: 100vh;
             width: 100%;
         }
 
-        /* Popup style */
+        /* POP UP SELAMAT DATANG */
         .popup {
             position: fixed;
             top: 50%;
@@ -114,20 +175,20 @@
             transform: translate(-50%, -50%);
             background-color: #ffffff;
             padding: 20px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #9c9b9b;
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 80%;
+            width: 50%;
             max-width: 400px;
             text-align: center;
             z-index: 1000;
             display: none;
         }
 
-        /* Tombol close (silang) */
+        /* Tombol close (silang) SELAMAT DATANG */
         .close-btn {
             position: absolute;
-            top: 10px;
+            top: 1px;
             right: 10px;
             font-size: 20px;
             font-weight: bold;
@@ -151,74 +212,139 @@
 
         .popup h3 {
             color: #000000;
-            font-size: 20px;
+            font-size: 10px;
             font-weight: bold;
         }
     </style>
-</head>
-<body>
-    <!-- Teks Heading 2 -->
-    <h2>KEVIN.COM</h2>
+<!-------------------------------------------------------------------------------------------------->
+<!--------------------------------------------------HTML-------------------------------------------->
+<!-------------------------------------------------------------------------------------------------->
 
-    <!-- Navbar -->
+
+
+    <!--PERINGATAN BELUM PREMIUM-->
+    <div class="message-box" id="alertBox">
+        <strong>Peringatan!</strong> "Anda saat ini sedang menggunakan fitur gratis. Segera tingkatkan ke premium agar mendapatkan video VIP tanpa iklan."
+    </div>
+    <!--PERINGATAN BELUM PREMIUM-->
+
+
+    <!--JUDUL SITUS-->
+    <h2>YT:MYKEP</h2>
+    <!--JUDUL SITUS-->
+
+
+    <!--BAR NAVIGASI-->
     <nav>
         <ul>
-            <li><a href="index.html">Saran Video</a></li>
-            <li><a href="PREMIUM.html">PREMIUM</a></li>
-            <li><a href="#">Profile</a></li>
+            <li><a href="index.html">VIDEO GRATIS</a></li>
+            <li><a href="PREMIUM.html">VIDEO PREMIUM</a></li>
         </ul>
     </nav>
+    <!--BAR NAVIGASI-->
 
-    <!-- Video Section Container -->
+
+    <!-------------------------------Video Section Container ------------------------------->
     <div class="video-container">
-        <!-- Video pertama -->
+        
+        <!--CONTENT 4-->
         <div class="video-section">
-            <video class="video-player" controls>
+            <video class="video-player" controls="">
                 <source src="TikTok - Make Your Day.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
 
-        <!-- Video kedua -->
+        <!--CONTENT 3-->
         <div class="video-section">
-            <video class="video-player" controls>
+            <video class="video-player" controls="">
                 <source src="TikTok - Make Your Day_2.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
 
-        <!-- Video ketiga -->
+        <!--CONTENT 2-->
         <div class="video-section">
-            <video class="video-player" controls>
+            <video class="video-player" controls="">
                 <source src="TikTok - Make Your Day_3.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
 
-        <!-- Video keempat -->
+        <!--CONTENT 1-->
         <div class="video-section">
-            <video class="video-player" controls>
+            <video class="video-player" controls="">
                 <source src="TikTok - Make Your Day_4.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
     </div>
 
-    <!-- Overlay dan Popup -->
-    <div class="popup-overlay"></div>
-    <div class="popup">
+      <!-------------------------------Video Section Container ------------------------------->
+
+
+   <!--POP UP SELAMAT DATANG-->
+    <div class="popup-overlay" style="display: none;"></div>
+    <div class="popup" style="display: none;">
         <button class="close-btn" onclick="closePopup()">×</button>
-        <h3>Selamat Datang Di corp.com</h3>
-        <p>Situs Ini di buat oleh YT:MR.CICADA Dan hanya untuk Edukasi 18+</p>
+        <h3>SELAMAT DATANG DI SITUS</h3>
+        <h4>YT:MYKEP</h4>
+        <p>Situs Ini di buat oleh</p><p>
+        </p><h4>MR.CICADA</h4> 
+        <p></p>!hanya untuk Edukasi Saja!<p></p>
     </div>
+<!--POP UP SELAMAT DATANG-->
 
-    <!-- Footer -->
+<!-- Tombol Floating Customer Service -->
+<button class="floating-btn" id="customerServiceBtn">
+    <i>?</i>
+</button>
+
+<!-- Popup Overlay dan Customer Service Pop-up -->
+<div class="popup-overlay" id="popupOverlay"></div>
+<div class="popup" id="popup">
+    <h3>Hubungi Customer Service</h3>
+    <button onclick="openWhatsApp()">Chat di WhatsApp</button>
+    <button onclick="openEmail()">Email Kami</button>
+</div>
+
+    <!--UJUNG BAWAH SITUS-->
     <footer>
-        <p>&copy; 2025 CICADA.CORXY</p>
+        <p>© 2025 CICADA.CORXY</p>
     </footer>
+  <!--UJUNG BAWAH SITUS-->
 
-    <script>
-        // Ambil semua elemen video
+
+<!-------------------------------------------------------------------------------------------------->
+<!--------------------------------------------------JAVA SCRIPT------------------------------------->
+<!-------------------------------------------------------------------------------------------------->
+
+<script>
+
+        // Fungsi untuk menampilkan popup
+    function showAlert() {
+        // Menampilkan pesan di layar
+        const alertBox = document.getElementById('alertBox');
+        alertBox.classList.add('active');
+        
+        // Menghilangkan pesan setelah 3 detik
+        setTimeout(function() {
+            alertBox.classList.remove('active');
+        }, 10000); // Menghilangkan peringatan premium setelah 10 detik
+    }
+
+    // Fungsi untuk menampilkan peringatan di konsol
+    function showConsoleWarning() {
+        console.warn("Peringatan: 60 detik telah berlalu!");
+    }
+
+    // Fungsi utama untuk mengatur popup dan peringatan setiap 45 detik
+    setInterval(function() {
+        showAlert(); // Menampilkan popup
+        showConsoleWarning(); // Menampilkan peringatan di konsol
+    }, 45000); // Muncul Setiap 45 detik
+
+     // Ambil semua elemen video
         const videos = document.querySelectorAll('.video-player');
 
         // Buat observer untuk mendeteksi video yang terlihat di layar
@@ -252,6 +378,48 @@
             document.querySelector('.popup').style.display = 'none';
             document.querySelector('.popup-overlay').style.display = 'none';
         }
+        
+
+         // Menampilkan atau menyembunyikan popup saat tombol customer service diklik
+         document.getElementById('customerServiceBtn').addEventListener('click', function() {
+            const popup = document.getElementById('popup');
+            const overlay = document.getElementById('popupOverlay');
+            const isPopupVisible = popup.style.display === 'block';
+
+            // Menampilkan atau menyembunyikan pop-up dan overlay
+            if (isPopupVisible) {
+                popup.style.display = 'none';
+                overlay.style.display = 'none';
+            } else {
+                popup.style.display = 'block';
+                overlay.style.display = 'block';
+            }
+        });
+
+        // Fungsi untuk membuka WhatsApp
+        function openWhatsApp() {
+            const phoneNumber = '6281234567890'; // Ganti dengan nomor WhatsApp Anda
+            const message = 'Halo, saya ingin bertanya mengenai layanan Anda.'; // Pesan otomatis yang ingin dikirim
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // Fungsi untuk membuka aplikasi email
+        function openEmail() {
+            const email = 'support@domain.com'; // Ganti dengan alamat email Anda
+            const subject = 'Pertanyaan Mengenai Layanan';
+            const body = 'Halo, saya ingin bertanya mengenai layanan Anda.';
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
+        // Menutup popup jika overlay diklik
+        document.getElementById('popupOverlay').addEventListener('click', function() {
+            const popup = document.getElementById('popup');
+            const overlay = document.getElementById('popupOverlay');
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
     </script>
-</body>
-</html>
+
