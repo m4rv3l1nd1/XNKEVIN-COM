@@ -204,7 +204,6 @@
         .menu.open .menu-icon:nth-child(3) {
             transform: rotate(45deg) translate(-5px, -6px);
         }
-
     </style>
 </head>
 <body>
@@ -337,7 +336,7 @@
         function switchToFreeMode() {
             // Logout dan mengarahkan ke index.html
             localStorage.removeItem('loggedIn'); // Menghapus status login
-            window.location.href = 'index.html';
+            window.location.href = 'index.html'; // Kembali ke halaman index.html
         }
     
         // Fungsi untuk logout
