@@ -134,13 +134,57 @@
 
         .popup p {
             margin-top: 10px;
-            color: #555;
+            color: 555;
         }
 
         .popup .countdown {
             font-size: 18px;
             color: #ff0000;
             font-weight: bold;
+        }
+
+        /* Popup untuk layanan */
+        .popup-layanan {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px); /* Blur background */
+        }
+
+        .popup-layanan-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid rgb(255, 255, 255);
+            border-radius: 11px;
+            margin-top: 170px;
+            width: 36vh;
+            max-width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        .popup-layanan .close {
+            color: rgb(0, 0, 0);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 10px;
+            top: 5px;
+        }
+
+        .popup-layanan .close:hover,
+        .popup-layanan .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         /* Menu Dropdown */
@@ -155,7 +199,7 @@
         .menu-icon {
             width: 30px;
             height: 3px;
-            background-color: #333;
+            background-color: rgb(255, 255, 255);
             margin: 6px 0;
             transition: 0.4s;
         }
@@ -172,15 +216,37 @@
         .menu.open .menu-icon:nth-child(3) {
             transform: rotate(45deg) translate(-5px, -6px);
         }
+
+        .popup-layanan button img {
+            vertical-align: middle;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
 
     <!-- Tombol Menu Garis Tiga -->
-    <div class="menu" id="menu-toggle" onclick="exitToIndex()">
+    <div class="menu" id="menu-toggle">
         <div class="menu-icon"></div>
         <div class="menu-icon"></div>
         <div class="menu-icon"></div>
+    </div>
+
+    <!-- Popup untuk Layanan -->
+    <div id="layanan-popup" class="popup-layanan">
+        <div class="popup-layanan-content">
+            <span class="close" onclick="closeLayananPopup()">&times;</span>
+            <button onclick="exitToIndex()">
+                <img src="LOGO EXIT.png" alt="Exit" width="20">Keluar
+            </button>
+            <p> Atau Hubungi Kami Jika Ada Kendala <p>
+            <button onclick="contactWhatsApp()">
+                <img src="LOGO WHATSAPP.png" alt="WhatsApp" width="20">WhatsApp
+            </button>
+            <button onclick="contactEmail()">
+                <img src="LOGO EMAIL.png" alt="Email" width="20">Email
+            </button>
+        </div>
     </div>
 
     <!-- Formulir Masuk -->
@@ -288,7 +354,28 @@
         function exitToIndex() {
             window.location.href = 'index.html';
         }
-    
+
+        // Fungsi untuk menunjukkan popup layanan
+        function showLayananPopup() {
+            document.getElementById('layanan-popup').style.display = 'block';
+        }
+
+        // Fungsi untuk menutup popup layanan
+        function closeLayananPopup() {
+            document.getElementById('layanan-popup').style.display = 'none';
+        }
+   
+        // Fungsi untuk menghubungi lewat WhatsApp
+        function contactWhatsApp() {
+            const message = 'Halo, saya ingin bertanya mengenai layanan Anda.'; // Pesan otomatis yang ingin dikirim
+            window.location.href = 'https://wa.me/085808268474';
+        }
+
+        // Fungsi untuk menghubungi lewat Email
+        function contactEmail() {
+            window.location.href = 'mailto:your-email@example.com';
+        }
+
         // Mengamati video agar autoplay dan berhenti jika video lain yang diputar
         const videos = document.querySelectorAll('.video-item');
         let currentVideo = null;
@@ -362,6 +449,11 @@
                 document.getElementById('video-container').style.pointerEvents = 'auto';
             }
         }
+
+        // Show popup on menu click
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            showLayananPopup();
+        });
     </script>
 </body>
 </html>
