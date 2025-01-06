@@ -150,7 +150,6 @@
             right: 18px;
             cursor: pointer;
             z-index: 1000;
-            display: none; /* Menyembunyikan menu saat login */
         }
 
         .menu-icon {
@@ -159,37 +158,6 @@
             background-color: #333;
             margin: 6px 0;
             transition: 0.4s;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 20px;
-            right: 0;
-            background-color: rgb(255, 255, 255);
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            padding: 10px;
-            width: 100px;
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            color: rgb(0, 0, 0);
-            padding: 10px;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        .dropdown-menu a img {
-            margin-right: 8px;
-            width: 16px; /* Sesuaikan ukuran gambar */
-            height: 16px;
-        }
-
-        .dropdown-menu a:hover {
-            background-color: #ffffff;
         }
 
         /* Transformasi garis menjadi X saat menu aktif */
@@ -209,17 +177,10 @@
 <body>
 
     <!-- Tombol Menu Garis Tiga -->
-    <div class="menu" id="menu-toggle">
+    <div class="menu" id="menu-toggle" onclick="exitToIndex()">
         <div class="menu-icon"></div>
         <div class="menu-icon"></div>
         <div class="menu-icon"></div>
-    </div>
-
-    <div class="dropdown-menu" id="dropdown-menu">
-        <a href="#" onclick="switchToFreeMode()">
-            <img src="EXIT.png" alt="Keluar">
-            Keluar
-        </a>
     </div>
 
     <!-- Formulir Masuk -->
@@ -262,7 +223,7 @@
     <!-- Popup untuk memberitahu kesalahan login -->
     <div class="popup" id="popup">
         <h3>Kesalahan Masuk!</h3>
-        <p>Anda telah mencoba 5 kali masuk dengan kata sandi yang salah. Harap tunggu selama <span id="countdown-timer" class="countdown">15</span> detik atau hubungi nomor berikut untuk berlangganan konten Premium:</p>
+        <p>Anda telah mencoba 5 kali masuk dengan kata sandi yang salah. Harap tunggu selama <span id="countdown-timer" class="countdown">15</span> detik atau hubungi nomor berikut untuk berlangganan [...]
         <p><strong>09238459589053</strong></p>
     </div>
 
@@ -323,26 +284,9 @@
             }
         }
     
-        // Menampilkan dan menyembunyikan dropdown menu
-        const menuToggle = document.getElementById('menu-toggle');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-    
-        menuToggle.addEventListener('click', function() {
-            menuToggle.classList.toggle('open');
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-        });
-    
-        // Fungsi untuk kembali ke Mode Gratis
-        function switchToFreeMode() {
-            // Logout dan mengarahkan ke index.html
-            localStorage.removeItem('loggedIn'); // Menghapus status login
-            window.location.href = 'index.html'; // Kembali ke halaman index.html
-        }
-    
-        // Fungsi untuk logout
-        function logout() {
-            localStorage.removeItem('loggedIn');
-            window.location.href = 'index.html'; // Kembali ke halaman index.html
+        // Fungsi untuk mengarah ke index.html
+        function exitToIndex() {
+            window.location.href = 'index.html';
         }
     
         // Mengamati video agar autoplay dan berhenti jika video lain yang diputar
