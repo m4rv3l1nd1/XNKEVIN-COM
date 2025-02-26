@@ -1,0 +1,62 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4); /* Gradient background pastel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full screen */
+    overflow: hidden; /* Menyembunyikan konten yang melampaui */
+}
+
+.slideshow-container {
+    position: relative;
+    width: 70%; /* Lebar kontainer */
+    height: 85%; /* Tinggi kontainer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Menyembunyikan gambar yang keluar dari kontainer */
+    border-radius: 20px; /* Border radius untuk sudut yang lebih lembut */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Efek bayangan untuk memberi kesan 3D */
+    background-color: rgba(255, 255, 255, 0.8); /* Background semi transparan */
+}
+
+.slideshow {
+    display: flex;
+    flex-direction: column;
+    animation: scroll 60s infinite; /* Durasi animasi scroll */
+}
+
+.slideshow img {
+    width: 92%; /* Lebar gambar 80% dari kontainer */
+    height: auto; /* Agar gambar tidak terdistorsi */
+    margin: 5px 0; /* Memberikan jarak antar gambar */
+    border: 8px solid #fff; /* Border putih di sekitar gambar */
+    border-radius: 15px; /* Border sudut tumpul */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Efek bayangan pada gambar */
+    transition: transform 0.5s ease; /* Efek transisi saat gambar berganti */
+}
+
+.slideshow img:hover {
+    transform: scale(1.05); /* Efek zoom ketika gambar di-hover */
+}
+
+/* Animasi untuk gambar-gambar yang berganti */
+@keyframes scroll {
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-100vh); /* Gambar pertama ke atas */
+    }
+    50% {
+        transform: translateY(-200vh); /* Gambar kedua ke atas */
+    }
+    75% {
+        transform: translateY(-300vh); /* Gambar ketiga ke atas */
+    }
+    100% {
+        transform: translateY(0); /* Kembali ke gambar pertama */
+    }
+}
