@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tampilan Estetik</title>
+    <style>
+        /* Reset default styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Set background dan layout */
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Kontainer utama */
+        .container {
+            text-align: center;
+        }
+
+        /* Tombol CTA */
+        .cta-button {
+            background-color: #6a4c93; /* Warna ungu muda */
+            color: white;
+            font-size: 18px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button:hover {
+            background-color: #7c57b7; /* Warna ungu lebih terang */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .cta-button:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="cta-button" onclick="redirectToContent()">Lihat Konten</button>
+    </div>
+
+    <script>
+        // Fungsi untuk mengarahkan ke content.html saat tombol diklik
+        function redirectToContent() {
+            window.location.href = "content.html"; // Ganti dengan URL yang sesuai jika perlu
+        }
+    </script>
+</body>
+</html>
